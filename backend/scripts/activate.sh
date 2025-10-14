@@ -11,7 +11,7 @@ if ! pg_isready -q; then
     
     for i in {1..30}; do
         if pg_isready -q; then
-            echo "✅ PostgreSQL is ready"
+            echo "PostgreSQL is ready"
             break
         fi
         echo "Waiting for PostgreSQL... ($i/30)"
@@ -19,11 +19,11 @@ if ! pg_isready -q; then
     done
 fi
 
-echo "🔌 Activating virtual environment..."
-source .venv/bin/activate
+echo "Activating virtual environment..."
+# source .venv/bin/activate
 
-echo "📊 Setting up database tables..."
+echo "Setting up database tables..."
 python -c "from app.database import create_tables; create_tables()"
 
 echo "Starting FastAPI server at http://localhost:8000"
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 

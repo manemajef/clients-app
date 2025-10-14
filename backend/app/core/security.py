@@ -1,19 +1,24 @@
-from passlib.context import CryptContext
-from jose import jwt, JWTError
+# from passlib.context import CryptContext
+import bcrypt
+import jwt
+from jwt import PyJWTError as JWTError
 from datetime import datetime, timedelta
 from app.core.config import settings
 from typing import Optional
-from app.services.utils import utc_now 
-pwd_context = CryptContext(schemas=["bcrypt"], deprecated="auto")
+from app.services.utils import utc_now
+
+# pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
 
 
 # == password ==
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode("utf-8"), salt)
+    return hashed.decode("utf-8")
 
 
-def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+def verify_password(password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(password.encode("utf-8"), hashed_password.encode("utf-8"))
 
 
 # == token create ==
