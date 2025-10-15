@@ -20,5 +20,3 @@ class Meeting(MeetingCreate, table = True):
     client: 'Client' = Relationship(back_populates="meetings")
     user: 'User' = Relationship(back_populates="meetings")
 
-    
-    
