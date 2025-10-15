@@ -1,7 +1,8 @@
 from sqlmodel import Session, select
 from app.models.user import UserCreate, User
+from app.models.client import Client, ClientCreate
 from fastapi import HTTPException
-from app.core.security import hash_password, verify_password
+from app.core.security import hash_password, verify_password, decode_access_token
 from typing import Optional
 
 
@@ -30,3 +31,13 @@ def authenticate_user(email: str, password: str, db: Session) -> User | None:
     if not verify_password(password, user.hashed_password):
         return None
     return user
+
+def get_user_by_token(token: str, db:Session) -> User | None:
+    email = decode_access_token(token)
+    if not email:
+        return None
+    return get_user_by_email(email, db)
+
+
+def add_client(token:str, client: ClientCreate, db: Session) -> Client | None:
+    pass
