@@ -1,7 +1,9 @@
-from app.services.user_service import add_client
+from app.services.client_service import add_client
 from app.database import engine
 from sqlmodel import Session
 from app.models.client import ContactBase, ClientAdd
+from app.services.utils import utc_now
+
 
 user = "rotem"
 clients = [
@@ -26,6 +28,8 @@ def test_client_add():
         for client in clients:
             added = add_client(user, client, db)
             print(added)
+
+
 
 if __name__ == "__main__":
     test_client_add()
