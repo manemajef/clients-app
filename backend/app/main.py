@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import auth, admin 
+from app.api.routes import auth, admin
 from contextlib import asynccontextmanager
 from app.database import create_tables
 
