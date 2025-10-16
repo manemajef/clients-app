@@ -9,12 +9,12 @@ dist/
 build/
 *.egg
 
-# venvs 
+# venvs
 .venv/
 venv/
 env/
 
-# .envs 
+# .envs
 .env
 .env.local
 .env.*.local
@@ -42,6 +42,11 @@ logs/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# threads
+threads/
+
+
 
 # Node
 node_modules/
