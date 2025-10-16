@@ -40,6 +40,5 @@ def new_refresh_token(token: str = Depends(oauth2_schema)):
 
 
 @router.get("/me", response_model=UserResponse)
-def get_me(token: str = Depends(oauth2_schema), db: Session = Depends(get_db)):
-    return get_current_user(token, db)
-
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
