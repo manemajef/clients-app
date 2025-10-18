@@ -5,7 +5,7 @@ from fastapi import Depends, HTTPException, status
 from app.core.security import decode_access_token
 from app.services.user_service import get_user_by_email
 from app.models.user import User
-from typing import Annotated
+# from typing import Annotated
 
 
 def get_db():

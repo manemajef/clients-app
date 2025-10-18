@@ -9,12 +9,5 @@ engine = create_engine(database_url, echo = False)
 def create_tables():
     SQLModel.metadata.create_all(engine)
 
-# def get_db():
-#     with Session(engine) as db:
-#         yield db
-
-# if __name__ == "__main__":
-#     with engine.connect() as conn:
-#         result = conn.execute(text("SELECT 'connected!'"))
-#     print(result.scalar())
-#
+def get_sqlmodel_schema() -> dict:
+    return SQLModel.metadata.tables.items()
