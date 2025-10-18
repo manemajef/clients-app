@@ -65,3 +65,6 @@ out/
 .cache/
 temp/
 tmp/
+
+## llm chats
+.claude/
