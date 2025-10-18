@@ -3,8 +3,8 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from app.models.user import UserCreate, UserResponse, UserLogin, User
 from pydantic import BaseModel
-from app.services.user_service import authenticate_user, create_user
-from app.api.deps import get_db, get_current_user
+from app.services.user_service import UserService
+from app.api.deps import get_db, get_current_user, get_user_service
 from app.core.security import create_access_token, create_refresh_token, refresh_token
 from app.models.token import TokenResponse
 
@@ -14,15 +14,15 @@ oauth2_schema = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
 @router.post("/register", response_model=UserResponse)
-def register(user: UserCreate, db: Session = Depends(get_db)):
+def register(user: UserCreate, user_service: UserService = Depends(get_user_service)):
     print("DEBUG:", type(user.password), repr(user.password))
 
-    return create_user(user, db)
+    return user_service.create_user(user)
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(login: UserLogin, db: Session = Depends(get_db)):
-    user = authenticate_user(login.email, login.password, db)
+def login(login: UserLogin, user_service: UserService = Depends(get_user_service)):
+    user = user_service.authenticate_user(login.email, login.password)
     if not user:
         raise HTTPException(status_code=401)
     token_data = {"sub": user.email}

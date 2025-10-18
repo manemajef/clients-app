@@ -1,13 +1,13 @@
-from sqlmodel import SQLModel, Field, Relationship 
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 from datetime import datetime
 from pydantic import BaseModel
-from app.services.utils import utc_now
-from typing import TYPE_CHECKING 
+from app.core.utils import utc_now
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.client import Client
-    from app.models.meeting import Meeting 
+    from app.models.meeting import Meeting
 
 class Token(BaseModel):
     access_token: str
@@ -16,14 +16,14 @@ class Token(BaseModel):
 
 class UserBase(SQLModel):
     email: str = Field(unique=True, index=True)
-    full_name: str | None = None 
+    full_name: str | None = None
 
 class User(UserBase, table=True):
     id:int | None = Field(default=None, primary_key=True)
     hashed_password: str
     created_at: datetime = Field(default_factory=utc_now)
     clients: list['Client'] = Relationship(back_populates = "user")
-    meetings: list['Meeting'] = Relationship(back_populates="user") 
+    meetings: list['Meeting'] = Relationship(back_populates="user")
 
 
 class UserCreate(UserBase):
@@ -43,4 +43,3 @@ class UserVerify(BaseModel):
 
 class UserRefresh(BaseModel):
     refresh_token: str
-

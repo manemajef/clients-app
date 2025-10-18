@@ -5,7 +5,7 @@ from jwt import PyJWTError as JWTError
 from datetime import datetime, timedelta
 from app.core.config import settings
 from typing import Optional
-from app.services.utils import utc_now
+from app.core.utils import utc_now
 
 # pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
 

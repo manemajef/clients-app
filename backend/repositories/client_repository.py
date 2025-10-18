@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from app.models.client import  Client, ClientAdd, Contact, ContactBase, ContactCreate
+from app.models.client import Client, Contact
 
 
 class ContactRepository:
@@ -33,5 +33,30 @@ class ContactRepository:
 class ClientRepository:
     def __init__(self, db: Session):
         self.db = db
-    def get_by_id(self, id:str) -> Client | None:
-        return self.db.exec(select(Client).where(Client.id == id)).first()
+
+    def create(self, client: Client) -> Client:
+        self.db.add(client)
+        self.db.flush()  # Get ID without committing
+        self.db.refresh(client)
+        return client
+
+    def get_all_by_user_id(self, user_id: int) -> list[Client]:
+        return self.db.exec(select(Client).where(Client.user_id == user_id)).all()
+
+    def get_by_id(self, client_id: int) -> Client | None:
+        return self.db.exec(select(Client).where(Client.id == client_id)).first()
+
+    def get_by_user_and_name(self, user_id: int, name: str) -> Client | None:
+        return self.db.exec(
+            select(Client).where(
+                (Client.user_id == user_id) & (Client.name == name)
+            )
+        ).first()
+
+    def exists_for_user(self, client_id: int, user_id: int) -> bool:
+        result = self.db.exec(
+            select(Client.id).where(
+                (Client.id == client_id) & (Client.user_id == user_id)
+            )
+        ).first()
+        return result is not None
